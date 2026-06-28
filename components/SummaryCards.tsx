@@ -9,6 +9,7 @@ import {
   monthKey,
   parseMonthKey,
   sumExpenses,
+  type ExpenseMonthKey,
 } from "@/lib/totals";
 import type { Totals, Transaction } from "@/lib/types";
 import { IncomeIcon, ExpenseIcon, BankIcon, PencilIcon } from "./Icons";
@@ -31,7 +32,9 @@ export default function SummaryCards({
     todayDate.getFullYear(),
     todayDate.getMonth(),
   );
-  const [expenseFilter, setExpenseFilter] = useState(currentMonthKey);
+  const [expenseFilter, setExpenseFilter] = useState<ExpenseMonthKey | "all">(
+    currentMonthKey,
+  );
 
   const monthOptions = useMemo(
     () => getExpenseMonthOptions(transactions, todayDate),
@@ -66,7 +69,9 @@ export default function SummaryCards({
           <select
             className="card-month-select"
             value={expenseFilter}
-            onChange={(e) => setExpenseFilter(e.target.value)}
+            onChange={(e) =>
+              setExpenseFilter(e.target.value as ExpenseMonthKey | "all")
+            }
             aria-label="Filter expenses by month"
           >
             {monthOptions.map((opt) => (
