@@ -1,0 +1,934 @@
+@import "tailwindcss";
+
+:root {
+  --bg-outer: #c9c8c0;
+  --cream: #f1efe7;
+  --card-cream: #f2f0e4;
+  --panel-cream: #dcd7c9;
+  --scrollbar-track: #c4bcb0;
+  --scrollbar-thumb: #f2efe8;
+  --charcoal: #484b42;
+  --charcoal-hover: #3a3d36;
+  --sage: #b2b5a3;
+  --field-bg: #f1efe7;
+  --field-border: #c8c8b4;
+  --text-dark: #484b42;
+  --text-muted: #6b6e58;
+  --on-sage: #ffffff;
+  --on-sage-muted: rgba(255, 255, 255, 0.85);
+  --red: #6d1818;
+  --green: #484b42;
+  --savings: #13414d;
+  --radius: 12px;
+  --grid-gap: 12px;
+  --frame: 4px;
+  --frame-gap: 5px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg-outer);
+  color: var(--text-dark);
+  font-family: var(--font-josefin), system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* ----------------------------------------------------------------- Shell */
+.app-shell {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 20px;
+}
+
+.window {
+  width: 100%;
+  max-width: 1180px;
+  background: var(--charcoal);
+  border-radius: 16px;
+  padding: var(--frame);
+  display: flex;
+  flex-direction: column;
+  gap: var(--frame-gap);
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.22),
+    0 4px 14px rgba(0, 0, 0, 0.12);
+}
+
+/* --------------------------------------------------------------- Titlebar */
+.titlebar {
+  background: var(--charcoal);
+  color: var(--on-sage);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  border-radius: 10px 10px 0 0;
+  flex-shrink: 0;
+}
+
+.titlebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.titlebar-logo {
+  font-size: 1.15rem;
+}
+
+.titlebar-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.titlebar-user {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.signout-btn {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--on-sage);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  padding: 5px 12px;
+  font-size: 0.8rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.signout-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* Cream content panel — rounded on all corners, sits below titlebar */
+.window-surface {
+  background: var(--cream);
+  border-radius: 14px;
+  overflow: hidden;
+  flex: 1;
+  min-width: 0;
+}
+
+/* ------------------------------------------------------------ Window body */
+.window-body {
+  padding: 18px 24px 22px;
+}
+
+.date-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--text-dark);
+  margin-bottom: 14px;
+}
+
+/* ------------------------------------------------------ Dashboard grid */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--grid-gap);
+  align-items: stretch;
+}
+
+/* Cards participate directly in the 3-column grid */
+.cards {
+  display: contents;
+}
+
+.card {
+  background: var(--sage);
+  color: var(--on-sage);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  min-height: 88px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  color: var(--on-sage-muted);
+}
+
+.card-month {
+  font-size: 0.82rem;
+  color: var(--on-sage-muted);
+}
+
+.card-month-select {
+  background: var(--field-bg);
+  border: 1px solid var(--field-border);
+  border-radius: 8px;
+  color: var(--text-dark);
+  font-size: 0.78rem;
+  font-family: inherit;
+  padding: 5px 10px;
+  max-width: 140px;
+  cursor: pointer;
+}
+.card-month-select:focus {
+  outline: 2px solid var(--charcoal);
+  outline-offset: 0;
+}
+.card-month-select option {
+  color: var(--text-dark);
+  background: var(--cream);
+}
+
+.card-value {
+  font-size: 1.65rem;
+  font-weight: 600;
+  line-height: 1.1;
+  text-align: center;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-balance .card-value {
+  color: var(--green);
+}
+
+.card-expenses .card-value {
+  color: var(--red);
+}
+
+.card-savings .card-value {
+  color: var(--savings);
+}
+
+/* Type colors — transaction log */
+.value-expenses {
+  color: var(--red);
+}
+
+.value-earnings {
+  color: var(--green);
+}
+
+.value-savings {
+  color: var(--savings);
+}
+
+.icon-btn {
+  background: transparent;
+  border: none;
+  color: var(--on-sage-muted);
+  cursor: pointer;
+  padding: 2px;
+  display: inline-flex;
+  border-radius: 6px;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.icon-btn:hover {
+  color: var(--on-sage);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.card-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.card-edit-label {
+  font-size: 0.7rem;
+  color: var(--on-sage-muted);
+  line-height: 1.2;
+}
+.card-edit-row {
+  display: flex;
+  gap: 6px;
+}
+.card-edit-input {
+  flex: 1;
+  min-width: 0;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--text-dark);
+  padding: 7px 9px;
+  font-size: 0.9rem;
+  font-family: inherit;
+}
+.card-edit-save {
+  background: var(--charcoal);
+  color: var(--on-sage);
+  border: none;
+  border-radius: 8px;
+  padding: 0 12px;
+  font-size: 0.8rem;
+  font-family: inherit;
+  cursor: pointer;
+}
+.card-edit-save:disabled {
+  opacity: 0.6;
+}
+
+/* Bottom row: form (col 1) + log (cols 2–3) */
+.dashboard-bottom {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--grid-gap);
+  align-items: start;
+}
+
+.dashboard-bottom-create {
+  grid-column: 1;
+  min-width: 0;
+}
+
+.dashboard-bottom-log {
+  grid-column: 2 / span 2;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Form column — aligns with Total Balance */
+.panel-create {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Mobile-only collapsible header (matches Transaction Log title placement) */
+.panel-create-header {
+  display: none;
+}
+
+.panel-create-toggle {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-dark);
+  text-align: left;
+  cursor: pointer;
+}
+
+.panel-create-chevron {
+  margin-left: auto;
+  flex-shrink: 0;
+  color: var(--text-muted);
+  transition: transform 0.2s ease;
+}
+
+.panel-create-chevron.is-open {
+  transform: rotate(180deg);
+}
+
+@media (max-width: 900px) {
+  .panel-create-header {
+    display: block;
+    margin-bottom: 0;
+  }
+
+  .panel-create-toggle {
+    padding: 2px 0;
+  }
+
+  .panel-create .create-form {
+    margin-top: 8px;
+  }
+}
+
+/* Log column — height set by DashboardBottom to match create column */
+.panel-log {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.panel-log .panel-title {
+  flex-shrink: 0;
+}
+
+.panel-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-dark);
+  margin: 0 0 8px;
+}
+
+/* --------------------------------------------------------- Create form */
+.create-form {
+  background: var(--sage);
+  border-radius: var(--radius);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  flex: 1;
+  min-height: 0;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.field > span {
+  font-size: 0.8rem;
+  color: var(--on-sage-muted);
+}
+.field input,
+.field select,
+.field textarea {
+  background: var(--field-bg);
+  border: 1px solid var(--field-border);
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-size: 0.86rem;
+  font-family: inherit;
+  color: var(--text-dark);
+  width: 100%;
+  resize: vertical;
+}
+.field textarea {
+  min-height: 52px;
+}
+.field input::placeholder,
+.field textarea::placeholder {
+  color: #9b9c86;
+}
+.field select:disabled {
+  opacity: 0.6;
+}
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: 2px solid var(--charcoal);
+  outline-offset: 0;
+}
+
+.submit-btn {
+  margin-top: auto;
+  background: var(--charcoal);
+  color: var(--on-sage);
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.submit-btn:hover {
+  background: var(--charcoal-hover);
+}
+.submit-btn:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.form-error {
+  color: #ffe3e0;
+  background: rgba(122, 30, 30, 0.5);
+  border-radius: 7px;
+  padding: 7px 9px;
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+/* ------------------------------------------------------- Transaction log */
+.log-panel {
+  flex: 1;
+  min-height: 0;
+  background: var(--panel-cream);
+  border-radius: var(--radius);
+  padding: 12px 10px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+.filters-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+.filters select {
+  background: var(--card-cream);
+  border: 1px solid var(--field-border);
+  border-radius: 8px;
+  padding: 7px 12px;
+  font-size: 0.85rem;
+  font-family: inherit;
+  color: var(--text-dark);
+}
+.filters-clear {
+  background: transparent;
+  border: none;
+  color: var(--red);
+  font-size: 0.82rem;
+  font-family: inherit;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.log-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 10px;
+  margin-right: 2px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+.log-list::-webkit-scrollbar {
+  width: 7px;
+}
+
+.log-list::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: 999px;
+}
+
+.log-list::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 999px;
+  border: 1px solid var(--scrollbar-track);
+  min-height: 48px;
+}
+
+.log-list::-webkit-scrollbar-thumb:hover {
+  background: #faf8f4;
+}
+
+.log-empty {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 32px 0;
+  font-size: 0.9rem;
+}
+
+.log-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--card-cream);
+  border: none;
+  border-radius: 14px;
+  padding: 12px 16px;
+  box-shadow: 0 2px 6px rgba(74, 78, 77, 0.08);
+}
+
+.log-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.log-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.log-category {
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.log-earnings .log-category,
+.log-earnings .log-amount {
+  color: var(--green);
+}
+
+.log-expenses .log-category,
+.log-expenses .log-amount {
+  color: var(--red);
+}
+
+.log-savings .log-category,
+.log-savings .log-amount {
+  color: var(--savings);
+}
+
+.log-earnings .log-icon {
+  color: var(--green);
+}
+
+.log-expenses .log-icon {
+  color: var(--red);
+}
+
+.log-savings .log-icon {
+  color: var(--savings);
+}
+.log-date {
+  font-size: 0.82rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  line-height: 1.3;
+}
+.log-description {
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.3;
+}
+
+.log-amount {
+  font-size: 1.05rem;
+  font-weight: 600;
+  white-space: nowrap;
+  margin-right: 4px;
+}
+
+.log-delete {
+  display: flex;
+}
+.log-delete button {
+  background: transparent;
+  border: none;
+  color: #b3b3a0;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  display: inline-flex;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.log-delete button:hover {
+  color: var(--red);
+  background: rgba(139, 0, 0, 0.08);
+}
+
+/* -------------------------------------------------------------- Login */
+.login-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.login-card {
+  background: var(--cream);
+  border-radius: 18px;
+  padding: 40px 36px;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.2);
+  border-top: 6px solid var(--charcoal);
+}
+.login-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.login-brand h1 {
+  font-size: 1.3rem;
+  font-weight: 500;
+  margin: 0;
+  color: var(--text-dark);
+}
+.login-logo {
+  font-size: 1.6rem;
+  color: var(--charcoal);
+}
+.login-subtitle {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin: 0 0 26px;
+}
+.google-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  background: #fff;
+  border: 1px solid #d8d6c8;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: #2b2b2b;
+  cursor: pointer;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.google-btn:hover {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-color: #c2c0b0;
+}
+.google-btn:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+/* -------------------------------------------------------------- Responsive */
+
+/* Tablet & mobile: stack layout */
+@media (max-width: 900px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-bottom {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .dashboard-bottom-create,
+  .dashboard-bottom-log {
+    grid-column: 1;
+  }
+
+  .dashboard-bottom-log {
+    height: auto !important;
+    min-height: 280px;
+    max-height: min(52vh, 420px);
+  }
+
+  .card-value {
+    font-size: 1.45rem;
+  }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .app-shell {
+    align-items: flex-start;
+    padding: 12px 10px 20px;
+  }
+
+  .window {
+    border-radius: 12px;
+    box-shadow:
+      0 12px 32px rgba(0, 0, 0, 0.18),
+      0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .titlebar {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px 14px;
+  }
+
+  .titlebar-brand {
+    font-size: 0.9rem;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .titlebar-brand span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .titlebar-actions {
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .titlebar-user {
+    display: none;
+  }
+
+  .signout-btn {
+    padding: 6px 10px;
+    font-size: 0.75rem;
+  }
+
+  .window-body {
+    padding: 16px 14px 18px;
+  }
+
+  .date-line {
+    font-size: 0.95rem;
+    margin-bottom: 12px;
+  }
+
+  .dashboard-grid {
+    gap: 10px;
+  }
+
+  .card {
+    min-height: auto;
+    padding: 12px 14px;
+  }
+
+  .card-head {
+    flex-wrap: wrap;
+  }
+
+  .card-title {
+    font-size: 0.82rem;
+  }
+
+  .card-value {
+    font-size: 1.35rem;
+  }
+
+  .card-month-select {
+    max-width: none;
+    flex: 1;
+    min-width: 110px;
+  }
+
+  .card-expenses .card-head {
+    align-items: flex-start;
+  }
+
+  .panel-title {
+    font-size: 0.95rem;
+  }
+
+  .create-form {
+    padding: 12px;
+  }
+
+  .field input,
+  .field select,
+  .field textarea {
+    padding: 10px 11px;
+    font-size: 16px; /* prevents iOS zoom on focus */
+  }
+
+  .log-panel {
+    padding: 10px 8px 12px 12px;
+  }
+
+  .filters {
+    gap: 8px;
+  }
+
+  .filters-label {
+    width: 100%;
+  }
+
+  .filters select {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .filters-clear {
+    margin-left: 0;
+    width: 100%;
+    text-align: left;
+    padding: 4px 0;
+  }
+
+  .log-row {
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 12px;
+  }
+
+  .log-category {
+    font-size: 0.95rem;
+  }
+
+  .log-amount {
+    font-size: 0.9rem;
+  }
+
+  .log-delete {
+    flex-shrink: 0;
+  }
+
+  .login-screen {
+    padding: 16px;
+  }
+
+  .login-card {
+    padding: 32px 24px;
+    border-radius: 14px;
+  }
+
+  .login-brand h1 {
+    font-size: 1.1rem;
+  }
+}
+
+/* Small phones */
+@media (max-width: 400px) {
+  .app-shell {
+    padding: 8px 6px 16px;
+  }
+
+  .window-body {
+    padding: 14px 12px 16px;
+  }
+
+  .card-value {
+    font-size: 1.2rem;
+  }
+
+  .log-amount {
+    font-size: 0.82rem;
+  }
+
+  .titlebar-brand {
+    font-size: 0.82rem;
+  }
+}
